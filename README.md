@@ -1,4 +1,4 @@
-# brainwave3
+﻿# brainwave3
 
 
 ---
@@ -8,3 +8,4 @@
 
 ## Developers
 * 土橋直己
+* 土井亮佑
