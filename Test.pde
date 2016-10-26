@@ -1,5 +1,6 @@
 PImage imgA, imgB, imgC;
-float transparency;
+float transparencyAtoB;
+float transparencyBtoC;
 float targetTransparency;
 boolean isFadeAtoB;
 boolean isFadeBtoC;
@@ -10,6 +11,8 @@ boolean isInAlternative_1;
 boolean isInAlternative_2;
 boolean isInAlternative_3;
 boolean isInAlternative_4;
+boolean isAlphawaveFirstLevel;
+boolean isAlphawaveSecondLevel;
 int currentTime;
 int fadeCompletedTime;
 int timeCounter;
@@ -18,6 +21,10 @@ int RectSize;
 int CorrectAnswer;
 int choose_answer;
 float easing;
+float alphawave;
+float AlphawaveFirstLevel;
+float AlphawaveSecondLevel;
+float TransparencyError;
 String Alternative_1;
 String Alternative_2;
 String Alternative_3;
@@ -26,9 +33,10 @@ String Alternative_4;
 
 
 void setup() {
-  isFadeAtoB = true;
+  isFadeAtoB = false;
   isFadeBtoC = false;
-  transparency = 0;
+  transparencyAtoB = 0;
+  transparencyBtoC = 0;
   targetTransparency = 255;
   isFadeCompletedAtoB = false;
   isFadeCompletedBtoC = false;
@@ -37,9 +45,15 @@ void setup() {
   isInAlternative_2 = false;
   isInAlternative_3 = false;
   isInAlternative_4 = false;
+  isAlphawaveFirstLevel = false;
+  isAlphawaveSecondLevel = false;
   easing = 0.005;
+  alphawave = 0;
+  AlphawaveFirstLevel = 0.2;         // α波の基準値
+  AlphawaveSecondLevel = 0.3;
+  TransparencyError = 4.0;           //  transparencyの値の許容誤差
   timeCounter = 0;
-  limitTime = 20;
+  limitTime = 60;                    //  制限時間
   RectSize = 40;
   Alternative_1 = "おとめ座";
   Alternative_2 = "さそり座";
@@ -61,67 +75,194 @@ void draw() {
   
 
 
+  // α波の感知
+ 
+  if(limitTime >45){
+    alphawave = 0.25;
+  }
+  else if(limitTime > 40){
+    alphawave = 0.35;
+  }
+  else if(limitTime > 30){
+    alphawave = 0.15;
+  }
+  else if(limitTime > 20){
+    alphawave = 0.35;
+  }
+  else if(limitTime > 9){
+    alphawave = 0.25;
+  }
+  else{
+    alphawave = 0.15;
+  }
   
   
   
-  // 3枚の画像の推移
+  
+  
+  // 3枚の画像の推移(A>B>C)
   
   background(255);
-  if(targetTransparency - transparency <= 1.0) {
-    currentTime = millis();
-    if(isFadeAtoB){
+    if(isAlphawaveFirstLevel){
       if(!isFadeCompletedAtoB){
-        isFadeCompletedAtoB = true;
-        fadeCompletedTime = currentTime;
+      isFadeAtoB = true;
       }
-      else if(isFadeCompletedAtoB) {
-        if(currentTime - fadeCompletedTime >= 0) {
-          transparency = 0;
-          isFadeAtoB = !isFadeAtoB;
-          isFadeBtoC = !isFadeBtoC;
-        }
+      if(targetTransparency - transparencyAtoB <= TransparencyError) {
+        currentTime = millis();
+          if(!isFadeCompletedAtoB){
+            isFadeCompletedAtoB = true;
+          }
+          else{
+            if(isAlphawaveSecondLevel){
+              if(!isFadeCompletedBtoC){
+                isFadeAtoB = false;
+                isFadeBtoC = true;
+              }
+              if(targetTransparency - transparencyBtoC <= TransparencyError){
+                if(!isFadeCompletedBtoC){
+                  isFadeCompletedBtoC = true;             
+                } 
+              }
+            }
+            else{
+              if(isFadeCompletedBtoC){
+                isFadeCompletedBtoC = !isFadeCompletedBtoC;
+                isFadeBtoC = true;
+              }
+            }
+          }
       }
     }
     else{
-      if(!isFadeCompletedBtoC){
-        isFadeCompletedBtoC = true;
-        fadeCompletedTime = currentTime;
+      if(isFadeCompletedBtoC){
+        isFadeCompletedBtoC = false;
+        isFadeBtoC = true;
       }
-      else if(isFadeCompletedBtoC) {
-        if(currentTime - fadeCompletedTime >= 0) {
-          transparency = 0;
-          isFadeBtoC = false;
+      if(transparencyBtoC <= TransparencyError){
+        isFadeBtoC = false;
+        if(isFadeCompletedAtoB){
+          isFadeCompletedAtoB = !isFadeCompletedAtoB;
+          isFadeAtoB = true;
         }
-      }
+      }  
     }
-    
-
-  }
+  
 
   if(isFadeAtoB) {
     noTint();
     image(imgA, 0, 0);
-    tint(255, transparency);
+    tint(255, transparencyAtoB);
     image(imgB, 0, 0);
   }   
   
   if(isFadeBtoC) {
     noTint();
     image(imgB, 0, 0);
-    tint(255, transparency);
+    tint(255, transparencyBtoC);
     image(imgC, 0, 0);
   } 
   
-  if(isFadeCompletedAtoB && isFadeCompletedBtoC){
-    image(imgC,0,0);
-  }
+  System.out.print(transparencyAtoB);
+  System.out.print(isFadeAtoB);
+  System.out.print(isFadeBtoC);
+  System.out.print(isFadeCompletedAtoB);
+  System.out.print(isFadeCompletedBtoC);
+  System.out.println(transparencyBtoC);
   
-  if(transparency<200){
-    transparency += (targetTransparency - transparency) * easing;
+  
+  // α波の強さが基準に達しているかの判定
+  
+  if(alphawave >= AlphawaveFirstLevel){
+    isAlphawaveFirstLevel = true;
   }
   else{
-    transparency += 100*easing;
+    isAlphawaveFirstLevel = false;
   }
+  if(alphawave >= AlphawaveSecondLevel){
+    isAlphawaveSecondLevel = true;
+  }
+  else{
+    isAlphawaveSecondLevel = false;
+  }
+  
+  
+  // α波の強さの評価
+   
+  
+  if(transparencyAtoB >= 0-TransparencyError && transparencyAtoB <= targetTransparency+TransparencyError){
+    if(transparencyBtoC >= 0-TransparencyError && transparencyBtoC <= targetTransparency+TransparencyError){
+      if(isAlphawaveFirstLevel){
+        if(isAlphawaveSecondLevel){
+          if(isFadeBtoC){
+            if(transparencyBtoC<200){
+              transparencyBtoC += (targetTransparency - transparencyBtoC) * easing;
+            }
+            else{
+              if(transparencyBtoC + 100*easing <= targetTransparency+TransparencyError/2){
+                transparencyBtoC += 100*easing;
+              }
+            }
+          }
+          if(isFadeAtoB){
+            if(transparencyAtoB<200){
+              transparencyAtoB += (targetTransparency - transparencyAtoB) * easing;
+            }
+            else{
+              if(transparencyAtoB + 100*easing <= targetTransparency+TransparencyError/2){
+                transparencyAtoB += 100*easing;
+              }
+            }
+          }
+        }
+        else{
+          if(isFadeAtoB){
+            if(transparencyAtoB<200){
+              transparencyAtoB += (targetTransparency - transparencyAtoB) * easing;
+            }
+            else{
+              if(transparencyAtoB + 100*easing <= targetTransparency+TransparencyError/2){
+                transparencyAtoB += 100*easing;
+              }  
+            }
+          }
+          if(isFadeBtoC){
+            if(transparencyBtoC>50){
+              transparencyBtoC -= transparencyBtoC * easing;
+            }
+            else{
+              if(transparencyBtoC - 100*easing >= TransparencyError/2){
+              transparencyBtoC -= 100*easing;
+              System.out.println("JJJJ");
+              }
+            }
+          }
+        }
+      }
+      else{
+        if(isFadeAtoB){
+          if(transparencyAtoB>50){
+            transparencyAtoB -= transparencyAtoB * easing;
+          }
+          else{
+            if(transparencyAtoB - 100*easing >= TransparencyError/2){
+              transparencyAtoB -= 100*easing;
+            }
+          }
+        }
+        if(isFadeBtoC){
+          if(transparencyBtoC>50){
+              transparencyBtoC -= transparencyBtoC * easing;
+          }
+          else{
+            if(transparencyBtoC - 100*easing >= TransparencyError/2){
+              transparencyBtoC -= 100*easing;
+            }
+          }
+        }
+      }
+    }
+  }
+  
   
   // 制限時間
  
@@ -169,6 +310,11 @@ void draw() {
   else{
     isInAlternative_4 = false;
   }
+    
+   
+
+    
+    
     
     
   // 選択ボックスの表示
