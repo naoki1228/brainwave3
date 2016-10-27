@@ -558,13 +558,27 @@ void changepictures(){
       textSize(30);
       text("正解",100,100);
       isCorrect = true;
+      isCompletedAnswer = true;
     }
     else{
       fill(255,0,0);
       textSize(30);
       text("不正解",100,100);
       isCorrect = false;
+       isCompletedAnswer = true;
     }
+  }
+   if(isCompletedAnswer && mousePressed){
+    scenarioCur = 1;
+    if(isCorrect){
+      isEvent = false;
+      scenario = loadStrings("scenario_win.txt");
+    }
+    else{
+     isEvent = false;
+     scenario = loadStrings("scenario_lose.txt");
+    }
+    
   }
 
 }
