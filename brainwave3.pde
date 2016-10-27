@@ -38,6 +38,7 @@ boolean isInAlternative_3;
 boolean isInAlternative_4;
 boolean isAlphawaveFirstLevel;
 boolean isAlphawaveSecondLevel;
+boolean isCorrect;
 int timeCounter;
 int limitTime;
 int RectSize;
@@ -122,55 +123,56 @@ void draw(){
   else{
     alphawave = 0.15;
   }
-
-  //if(bgAlpha<255) bgAlpha += 20;
-  if(bg!=null) {
-    tint(255, bgAlpha);
-    image(bg, 0, 0);
-  } else background(0, bgAlpha);
-
-
-  if(chara!=null) {
-    if(charaAlpha<255) charaAlpha += 20;
-    tint(255, charaAlpha);
-    image(chara, 0, 0);
-  }
-
-  int boardH = 80;
-  int boardY = height-boardH;
-  noStroke();
-  fill(0, 0, 0, 200);
-  rect(0, boardY, width, boardH);
-
-  if(message.length()>0) {
-    fill(255);
-    textAlign(LEFT);
-    text(message.substring(0, messageCur), 20, boardY+15, width-80, 20*2+20);
-    if(messageCur<message.length()) messageCur++;
-    else {
-
-      fill(255, sin(radians(millis()/2)) * 255);
-      ellipse(width-30, height-30, 20, 20);
-      if(mousePressed && !prevMousePressed) {
-        message = ""; messageCur = 0;
+  if(isEvent == false){
+    if(bgAlpha<255) bgAlpha += 20;
+    if(bg!=null) {
+      tint(255, bgAlpha);
+      image(bg, 0, 0);
+    } else background(0, bgAlpha);
+  
+  
+    if(chara!=null) {
+      if(charaAlpha<255) charaAlpha += 20;
+      tint(255, charaAlpha);
+      image(chara, 0, 0);
+    }
+  
+    int boardH = 80;
+    int boardY = height-boardH;
+    noStroke();
+    fill(0, 0, 0, 200);
+    rect(0, boardY, width, boardH);
+  
+    if(message.length()>0) {
+      fill(255);
+      textAlign(LEFT);
+      text(message.substring(0, messageCur), 20, boardY+15, width-80, 20*2+20);
+      if(messageCur<message.length()) messageCur++;
+      else {
+  
+        fill(255, sin(radians(millis()/2)) * 255);
+        ellipse(width-30, height-30, 20, 20);
+        if(mousePressed && !prevMousePressed) {
+          message = ""; messageCur = 0;
+        }
       }
     }
-  }
-
- if(messageCur<=0) {
-    // 空行に出くわすまで連続してシナリオコマンドを処理
-    for(;;) {
-      if(scenarioCur>=scenario.length) {
-        exit(); break; // 終了
-      }
-      println(nf(scenarioCur, 4) + ": " + scenario[scenarioCur]); // for debug
-      if(doCommand(scenario[scenarioCur++])) {
-        println("----"); // for debug
-        break;
+  
+   if(messageCur<=0) {
+      // 空行に出くわすまで連続してシナリオコマンドを処理
+      for(;;) {
+        if(scenarioCur>=scenario.length) {
+          exit(); break; // 終了
+        }
+        println(nf(scenarioCur, 4) + ": " + scenario[scenarioCur]); // for debug
+        if(doCommand(scenario[scenarioCur++])) {
+          println("----"); // for debug
+          break;
+        }
       }
     }
+    prevMousePressed = mousePressed;
   }
-  prevMousePressed = mousePressed;
   
   if(isEvent){
       // 3枚の画像の推移(A>B>C)
@@ -399,13 +401,12 @@ void draw(){
   rect(imgA.width/2.0,imgA.height,imgA.width/2.0,RectSize);
   rect(0,imgA.height+RectSize,imgA.width/2.0,RectSize);
   rect(imgA.width/2.0,imgA.height+RectSize,imgA.width/2.0,RectSize);
-  System.out.println("選択ボックスの表示をしています");
   
   
   // 日本語フォントを選択し指定する呪文
   
-  PFont font = createFont("MS Gothic",25,true);
-  textFont(font);
+  //PFont font = createFont("MS Gothic",25,true);
+  //textFont(font);
   
   // 選択肢の表示
   
@@ -442,7 +443,7 @@ void draw(){
   else{
     textSize(25);
   }
-  text(Alternative_4,imgA.width*0.75,imgA.height+RectSize*1.75);
+  //text(Alternative_4,imgA.width*0.75,imgA.height+RectSize*1.75);
   
   
   
@@ -455,16 +456,17 @@ void draw(){
       fill(255,0,0);
       textSize(30);
       text("正解",100,100);
+      isCorrect = true;
+      isEvent = false;
     }
     else{
       fill(255,0,0);
       textSize(30);
       text("不正解",100,100);
+      isCorrect = false;
+      isEvent = false;
     }
   }
-  //if(mousePressed) {
-  //   noLoop();
-  //}
 }
 }
 
