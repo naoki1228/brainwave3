@@ -55,7 +55,7 @@ String Alternative_4;
 
 // setup
 void setup() {
-  size(640, 480);
+  size(457, 387);
   textFont(createFont("MS PMincho", 20)); //String[] fontList = PFont.list(); println(fontList);
   scenario = loadStrings("scenario.txt");
 
@@ -98,10 +98,6 @@ void setup() {
   choose_answer = 0; 
 }
 
-void settings() {
-  imgA = loadImage("washi1.jpg");
-  size(imgA.width, imgA.height+80);   //RectSizeを変更したらここも変える
-}
 
 // 毎フレームの進行と描画
 void draw(){
@@ -179,6 +175,7 @@ void draw(){
   if(isEvent){
       // 3枚の画像の推移(A>B>C)
   
+  
   background(255);
     if(isAlphawaveFirstLevel){
       if(!isFadeCompletedAtoB){
@@ -239,12 +236,12 @@ void draw(){
     image(imgC, 0, 0);
   } 
   
-  System.out.print(transparencyAtoB);
-  System.out.print(isFadeAtoB);
-  System.out.print(isFadeBtoC);
-  System.out.print(isFadeCompletedAtoB);
-  System.out.print(isFadeCompletedBtoC);
-  System.out.println(transparencyBtoC);
+  //System.out.print(transparencyAtoB);
+  //System.out.print(isFadeAtoB);
+  //System.out.print(isFadeBtoC);
+  //System.out.print(isFadeCompletedAtoB);
+  //System.out.print(isFadeCompletedBtoC);
+  //System.out.println(transparencyBtoC);
   
   
   // α波の強さが基準に達しているかの判定
@@ -402,6 +399,8 @@ void draw(){
   rect(imgA.width/2.0,imgA.height,imgA.width/2.0,RectSize);
   rect(0,imgA.height+RectSize,imgA.width/2.0,RectSize);
   rect(imgA.width/2.0,imgA.height+RectSize,imgA.width/2.0,RectSize);
+  System.out.println("選択ボックスの表示をしています");
+  
   
   // 日本語フォントを選択し指定する呪文
   
@@ -463,6 +462,9 @@ void draw(){
       text("不正解",100,100);
     }
   }
+  //if(mousePressed) {
+  //   noLoop();
+  //}
 }
 }
 
@@ -506,15 +508,15 @@ boolean doCommand(String commandStr) {
           imgA = loadImage(args[1]);
           imgB = loadImage(args[2]);
           imgC = loadImage(args[3]);
-          if (imgA.width != width || imgA.height != height) {
-            imgA.resize(width, height);
-          }
-          if (imgB.width != width || imgB.height != height) {
-            imgB.resize(width, height);
-          }
-          if (imgC.width != width || imgC.height != height) {
-            imgC.resize(width, height);
-          }
+          //if (imgA.width != width || imgA.height != height) {
+          //  imgA.resize(width, height);
+          //}
+          //if (imgB.width != width || imgB.height != height) {
+          //  imgB.resize(width, height);
+          //}
+          //if (imgC.width != width || imgC.height != height) {
+          //  imgC.resize(width, height);
+          //}
          }
       }
       if(">image".equals(args[0])) {

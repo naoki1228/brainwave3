@@ -7,10 +7,6 @@ Processingでアドベンチャーゲーム。
 
 マウスをクリックしてみましょう
 
->bg washi1.jpg
-
-画像は出てきましたか？
-
 >event washi1.jpg washi2.jpg washi3.jpg
 
 テキストファイルを読み込み、
