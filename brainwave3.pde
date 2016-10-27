@@ -9,7 +9,7 @@ float[][] buffer = new float[N_CHANNELS][BUFFER_SIZE];
 int pointer = 0;
 
 // adventure_initial_variables
-PImage bg, chara;
+PImage bg, chara,pic1,pic2,pic3;
 int bgAlpha = 0;
 int charaAlpha = 0;
 String[] scenario;
@@ -29,6 +29,7 @@ boolean  isFadeCompletedBtoC;
 boolean ischeckerAtoB;
 boolean ischeckerBtoC;
 boolean isEvent = false;
+boolean isMuse;
 int currentTime;
 int fadeCompletedTime;
 float easing;
@@ -92,6 +93,7 @@ void setup() {
   isInAlternative_4 = false;
   isAlphawaveFirstLevel = false;
   isAlphawaveSecondLevel = false;
+  isMuse = false;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
   AlphawaveFirstLevel = 0.2;         // α波の基準値
   AlphawaveSecondLevel = 0.4;
   TransparencyError = 4.0;           //  transparencyの値の許容誤差
@@ -104,29 +106,17 @@ void setup() {
   Alternative_4 = "やぎ座";
   CorrectAnswer = 4;                  //正解の選択肢番号
   choose_answer = 0;
+  
+  pic1 =loadImage("washi1.jpg");
+  pic2 =loadImage("washi2.jpg");
+  pic3 =loadImage("washi3.jpg");
 }
 
 
 // 毎フレームの進行と描画
 void draw(){
-  //if(limitTime >45){
-  //  alphawave = 0.25;
-  //}
-  //else if(limitTime > 40){
-  //  alphawave = 0.35;
-  //}
-  //else if(limitTime > 30){
-  //  alphawave = 0.15;
-  //}
-  //else if(limitTime > 20){
-  //  alphawave = 0.35;
-  //}
-  //else if(limitTime > 9){
-  //  alphawave = 0.25;
-  //}
-  //else{
-  //  alphawave = 0.15;
-  //}
+ 
+ 
   if(isEvent == false){
 
     if(chara!=null) {
@@ -172,18 +162,133 @@ void draw(){
     prevMousePressed = mousePressed;
   }
   if(isEvent){
+    changepictures();
+  }
+}
+
+  //解答の選択
+
+void mouseClicked(){
+
+  if(!isCompletedAnswer){
+    if(isInAlternative_1){
+      choose_answer = 1;
+      isCompletedAnswer = true;
+    }
+    if(isInAlternative_2){
+      choose_answer = 2;
+      isCompletedAnswer = true;
+    }
+    if(isInAlternative_3){
+      choose_answer = 3;
+      isCompletedAnswer = true;
+    }
+    if(isInAlternative_4){
+      choose_answer = 4;
+      isCompletedAnswer = true;
+    }
+  }
+}
+
+
+boolean doCommand(String commandStr) {
+  if(commandStr.length()<=0) {
+    return true; // 空行のときだけtrueを返す
+  } else if(commandStr.charAt(0)=='>') {
+    String[] args = splitTokens(commandStr);
+    if(args.length>0) {
+      if(">event".equals(args[0])) {
+        if(args.length>1) {
+          isEvent = true;
+          bgAlpha = 0;
+          println(isEvent); // for debug
+          
+          Question question = new Question(pic1,pic2,pic3);                              // picだけ変えればクイズ作れる
+          //bg = loadImage(args[1]);
+          //imgA = loadImage(args[1]);
+          //imgB = loadImage(args[2]);
+          //imgC = loadImage(args[3]);
+          //if (imgA.width != width || imgA.height != height) {
+          //  imgA.resize(width, height);
+          //}
+          //if (imgB.width != width || imgB.height != height) {
+          //  imgB.resize(width, height);
+          //}
+          //if (imgC.width != width || imgC.height != height) {
+          //  imgC.resize(width, height);
+          //}
+         }
+      }
+      if(">image".equals(args[0])) {
+        charaAlpha = 0;
+        if(args.length>1) chara = loadImage(args[1]);
+        else chara = null;
+      } else if(">bg".equals(args[0])) {
+        if(args.length>1) {
+          bgAlpha = 0;
+          bg = loadImage(args[1]);
+          println("loading image!");
+          if (bg.width != width || bg.height != height) {
+            bg.resize(width, height);
+          }
+         } else bg = null;
+        }
+    }
+  } else {
+    if(message.length()>0) message += "\n";
+    message += commandStr;
+  }
+  return false;
+}
+
+void oscEvent(OscMessage msg){
+  float data;
+  if(msg.checkAddrPattern("/muse/elements/alpha_relative")){
+    for(int ch = 0; ch < N_CHANNELS; ch++){
+      data = msg.get(ch).floatValue();
+      buffer[ch][pointer] = data;
+    }
+    pointer = (pointer + 1) % BUFFER_SIZE;
+  }
+}
+
+void changepictures(){
+  
+  
     // α波の感知
-    //float sum = 0;
-    //for(int ch = 0; ch < N_CHANNELS; ch++){
-    //  sum = sum + buffer[ch][pointer];
-    //}
-    //alphawave = sum / 4;
+  if(isMuse){  
+    float sum = 0;
+    for(int ch = 0; ch < N_CHANNELS; ch++){
+      sum = sum + buffer[ch][pointer];
+    }
+    alphawave = sum / 4;
+  }
+  else{
+    if(limitTime >45){
+      alphawave = 0.25;
+    }
+    else if(limitTime > 40){
+      alphawave = 0.45;
+    }
+    else if(limitTime > 30){
+      alphawave = 0.15;
+    }
+    else if(limitTime > 20){
+      alphawave = 0.45;
+    }
+    else if(limitTime > 9){
+      alphawave = 0.25;
+    }
+    else{
+      alphawave = 0.15;
+    }
+  }
     
     
-    alphawave = buffer[0][pointer];
+   // alphawave = buffer[0][pointer];
     
-    System.out.println(alphawave);
-;
+   //System.out.println(alphawave);
+
     background(255);
     if(isAlphawaveFirstLevel){
       if(!isFadeCompletedAtoB){
@@ -307,7 +412,6 @@ void draw(){
             else{
               if(transparencyBtoC - 100*easing >= TransparencyError/2){
               transparencyBtoC -= 100*easing;
-              System.out.println("JJJJ");
               }
             }
           }
@@ -462,89 +566,5 @@ void draw(){
       isCorrect = false;
     }
   }
-}
-}
 
-  //解答の選択
-
-void mouseClicked(){
-
-  if(!isCompletedAnswer){
-    if(isInAlternative_1){
-      choose_answer = 1;
-      isCompletedAnswer = true;
-    }
-    if(isInAlternative_2){
-      choose_answer = 2;
-      isCompletedAnswer = true;
-    }
-    if(isInAlternative_3){
-      choose_answer = 3;
-      isCompletedAnswer = true;
-    }
-    if(isInAlternative_4){
-      choose_answer = 4;
-      isCompletedAnswer = true;
-    }
-  }
-}
-
-
-boolean doCommand(String commandStr) {
-  if(commandStr.length()<=0) {
-    return true; // 空行のときだけtrueを返す
-  } else if(commandStr.charAt(0)=='>') {
-    String[] args = splitTokens(commandStr);
-    if(args.length>0) {
-      if(">event".equals(args[0])) {
-        if(args.length>1) {
-          isEvent = true;
-          bgAlpha = 0;
-          println(isEvent); // for debug
-          //bg = loadImage(args[1]);
-          imgA = loadImage(args[1]);
-          imgB = loadImage(args[2]);
-          imgC = loadImage(args[3]);
-          //if (imgA.width != width || imgA.height != height) {
-          //  imgA.resize(width, height);
-          //}
-          //if (imgB.width != width || imgB.height != height) {
-          //  imgB.resize(width, height);
-          //}
-          //if (imgC.width != width || imgC.height != height) {
-          //  imgC.resize(width, height);
-          //}
-         }
-      }
-      if(">image".equals(args[0])) {
-        charaAlpha = 0;
-        if(args.length>1) chara = loadImage(args[1]);
-        else chara = null;
-      } else if(">bg".equals(args[0])) {
-        if(args.length>1) {
-          bgAlpha = 0;
-          bg = loadImage(args[1]);
-          println("loading image!");
-          if (bg.width != width || bg.height != height) {
-            bg.resize(width, height);
-          }
-         } else bg = null;
-        }
-    }
-  } else {
-    if(message.length()>0) message += "\n";
-    message += commandStr;
-  }
-  return false;
-}
-
-void oscEvent(OscMessage msg){
-  float data;
-  if(msg.checkAddrPattern("/muse/elements/alpha_relative")){
-    for(int ch = 0; ch < N_CHANNELS; ch++){
-      data = msg.get(ch).floatValue();
-      buffer[ch][pointer] = data;
-    }
-    pointer = (pointer + 1) % BUFFER_SIZE;
-  }
 }
