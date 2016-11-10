@@ -9,7 +9,7 @@ float[][] buffer = new float[N_CHANNELS][BUFFER_SIZE];
 int pointer = 0;
 
 // adventure_initial_variables
-PImage bg, chara,pic1,pic2,pic3;
+PImage bg, chara,pic_q1_1,pic_q1_2,pic_q1_3,pic_q2_1,pic_q2_2,pic_q2_3,pic_q3_1,pic_q3_2,pic_q3_3,pic_q4_1,pic_q4_2,pic_q4_3,pic_q5_1,pic_q5_2,pic_q5_3;
 int bgAlpha = 0;
 int charaAlpha = 0;
 String[] scenario;
@@ -52,6 +52,11 @@ int timeCounter;
 int limitTime;
 int RectSize;
 int CorrectAnswer;
+int CorrectAnswer_q1;
+int CorrectAnswer_q2;
+int CorrectAnswer_q3;
+int CorrectAnswer_q4;
+int CorrectAnswer_q5;
 int choose_answer;
 float alphawave;
 float AlphawaveFirstLevel;
@@ -61,6 +66,26 @@ String Alternative_1;
 String Alternative_2;
 String Alternative_3;
 String Alternative_4;
+String Alternative_q1_1;
+String Alternative_q1_2;
+String Alternative_q1_3;
+String Alternative_q1_4;
+String Alternative_q2_1;
+String Alternative_q2_2;
+String Alternative_q2_3;
+String Alternative_q2_4;
+String Alternative_q3_1;
+String Alternative_q3_2;
+String Alternative_q3_3;
+String Alternative_q3_4;
+String Alternative_q4_1;
+String Alternative_q4_2;
+String Alternative_q4_3;
+String Alternative_q4_4;
+String Alternative_q5_1;
+String Alternative_q5_2;
+String Alternative_q5_3;
+String Alternative_q5_4;
 
 
 // setup
@@ -100,21 +125,70 @@ void setup() {
   timeCounter = 0;
   limitTime = 60;                    //  制限時間
   RectSize = 40;
-  Alternative_1 = "おとめ座";
-  Alternative_2 = "さそり座";
-  Alternative_3 = "おうし座";
-  Alternative_4 = "やぎ座";
-  CorrectAnswer = 4;                  //正解の選択肢番号
   choose_answer = 0;
   
-  pic1 =loadImage("washi1.jpg");
-  pic2 =loadImage("washi2.jpg");
-  pic3 =loadImage("washi3.jpg");
+  //Question1
+  
+  pic_q1_1 =loadImage("washi1.jpg");
+  pic_q1_2 =loadImage("washi2.jpg");
+  pic_q1_3 =loadImage("washi3.jpg");
+  Alternative_q1_1 = "おとめ座";
+  Alternative_q1_2 = "さそり座";
+  Alternative_q1_3 = "ふたご座";
+  Alternative_q1_4 = "わし座";
+  CorrectAnswer_q1 = 4;
+  
+  //Question2
+  
+  pic_q2_1 =loadImage("koto1.jpg");
+  pic_q2_2 =loadImage("koto2.jpg");
+  pic_q2_3 =loadImage("koto3.jpg");
+  Alternative_q2_1 = "へび座";
+  Alternative_q2_2 = "こと座";
+  Alternative_q2_3 = "かに座";
+  Alternative_q2_4 = "うお座";
+  CorrectAnswer_q2 = 2;
+  
+  //Question3
+  
+  pic_q3_1 =loadImage("hakucho1.jpg");
+  pic_q3_2 =loadImage("hakucho2.jpg");
+  pic_q3_3 =loadImage("hakucho3.jpg");
+  Alternative_q3_1 = "はくちょう座";
+  Alternative_q3_2 = "てんびん座";
+  Alternative_q3_3 = "おおいぬ座";
+  Alternative_q3_4 = "おひつじ座";
+  CorrectAnswer_q3 = 1;
+  
+  //Question4
+  
+  pic_q4_1 =loadImage("ooguma1.jpg");
+  pic_q4_2 =loadImage("ooguma2.jpg");
+  pic_q4_3 =loadImage("oobuma3.jpg");
+  Alternative_q4_1 = "アンドロメダ座";
+  Alternative_q4_2 = "カシオペア座";
+  Alternative_q4_3 = "オリオン座";
+  Alternative_q4_4 = "おおぐま座";
+  CorrectAnswer_q4 = 4;
+  
+  //Question5
+  
+  pic_q5_1 =loadImage("ushikai1.jpg");
+  pic_q5_2 =loadImage("ushikai2.jpg");
+  pic_q5_3 =loadImage("ushikai3.jpg");
+  Alternative_q5_1 = "きょしちょう座";
+  Alternative_q5_2 = "とびうお座";
+  Alternative_q5_3 = "うしかい座";
+  Alternative_q5_4 = "ろくぶんぎ座";
+  CorrectAnswer_q5 = 3;
+  
 }
 
 
 // 毎フレームの進行と描画
 void draw(){
+  
+  background(0);
  
  
   if(isEvent == false){
@@ -203,7 +277,7 @@ boolean doCommand(String commandStr) {
           bgAlpha = 0;
           println(isEvent); // for debug
           
-          Question question = new Question(pic1,pic2,pic3);                              // picだけ変えればクイズ作れる
+          Question question = new Question(pic_q1_1,pic_q1_2,pic_q1_3,Alternative_q1_1,Alternative_q1_2,Alternative_q1_3,Alternative_q1_4,CorrectAnswer_q1);                              // picだけ変えればクイズ作れる
           //bg = loadImage(args[1]);
           //imgA = loadImage(args[1]);
           //imgB = loadImage(args[2]);
