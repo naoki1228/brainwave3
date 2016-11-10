@@ -568,14 +568,21 @@ void changepictures(){
        isCompletedAnswer = true;
     }
   }
+  
+  // scenario choice
+  
    if(isCompletedAnswer && mousePressed){
     scenarioCur = 1;
     if(isCorrect){
       isEvent = false;
+      size(457, 387);
+      textFont(createFont("MS PMincho", 20));
       scenario = loadStrings("scenario_win.txt");
     }
     else{
      isEvent = false;
+     size(457, 387);
+      textFont(createFont("MS PMincho", 20));
      scenario = loadStrings("scenario_lose.txt");
     }
     
