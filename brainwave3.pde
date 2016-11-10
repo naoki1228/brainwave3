@@ -58,6 +58,7 @@ int CorrectAnswer_q3;
 int CorrectAnswer_q4;
 int CorrectAnswer_q5;
 int choose_answer;
+int questionNum;
 float alphawave;
 float AlphawaveFirstLevel;
 float AlphawaveSecondLevel;
@@ -118,14 +119,15 @@ void setup() {
   isInAlternative_4 = false;
   isAlphawaveFirstLevel = false;
   isAlphawaveSecondLevel = false;
-  isMuse = false;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
-  AlphawaveFirstLevel = 0.2;         // α波の基準値
-  AlphawaveSecondLevel = 0.4;
+  isMuse = true;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
+  AlphawaveFirstLevel = 0.15;         // α波の基準値
+  AlphawaveSecondLevel = 0.25;
   TransparencyError = 4.0;           //  transparencyの値の許容誤差
   timeCounter = 0;
   limitTime = 60;                    //  制限時間
   RectSize = 40;
   choose_answer = 0;
+  questionNum = 1;
   
   //Question1
   
@@ -164,7 +166,7 @@ void setup() {
   
   pic_q4_1 =loadImage("ooguma1.jpg");
   pic_q4_2 =loadImage("ooguma2.jpg");
-  pic_q4_3 =loadImage("oobuma3.jpg");
+  pic_q4_3 =loadImage("ooguma3.jpg");
   Alternative_q4_1 = "アンドロメダ座";
   Alternative_q4_2 = "カシオペア座";
   Alternative_q4_3 = "オリオン座";
@@ -272,12 +274,35 @@ boolean doCommand(String commandStr) {
     String[] args = splitTokens(commandStr);
     if(args.length>0) {
       if(">event".equals(args[0])) {
-        if(args.length>1) {
+      //  if(args.length>1) {
           isEvent = true;
           bgAlpha = 0;
           println(isEvent); // for debug
           
-          Question question = new Question(pic_q1_1,pic_q1_2,pic_q1_3,Alternative_q1_1,Alternative_q1_2,Alternative_q1_3,Alternative_q1_4,CorrectAnswer_q1);                              // picだけ変えればクイズ作れる
+          System.out.println(questionNum);
+          
+          if(questionNum == 1){
+            Question question1 = new Question(pic_q1_1,pic_q1_2,pic_q1_3,Alternative_q1_1,Alternative_q1_2,Alternative_q1_3,Alternative_q1_4,CorrectAnswer_q1);
+            questionNum = 2;
+          }
+          else if(questionNum == 2){
+            Question question2 = new Question(pic_q2_1,pic_q2_2,pic_q2_3,Alternative_q2_1,Alternative_q2_2,Alternative_q2_3,Alternative_q2_4,CorrectAnswer_q2);
+            questionNum = 3;
+          }
+          else if(questionNum == 3){
+            Question question3 = new Question(pic_q3_1,pic_q3_2,pic_q3_3,Alternative_q3_1,Alternative_q3_2,Alternative_q3_3,Alternative_q3_4,CorrectAnswer_q3);
+            questionNum = 4;
+          }
+          else if(questionNum == 4){
+            Question question4 = new Question(pic_q4_1,pic_q4_2,pic_q4_3,Alternative_q4_1,Alternative_q4_2,Alternative_q4_3,Alternative_q4_4,CorrectAnswer_q4);
+            questionNum = 5;
+          }
+          else{
+            Question question5 = new Question(pic_q5_1,pic_q5_2,pic_q5_3,Alternative_q5_1,Alternative_q5_2,Alternative_q5_3,Alternative_q5_4,CorrectAnswer_q5);
+            questionNum = 6;
+          }
+          
+              
           //bg = loadImage(args[1]);
           //imgA = loadImage(args[1]);
           //imgB = loadImage(args[2]);
@@ -291,7 +316,7 @@ boolean doCommand(String commandStr) {
           //if (imgC.width != width || imgC.height != height) {
           //  imgC.resize(width, height);
           //}
-         }
+        // }
       }
       if(">image".equals(args[0])) {
         charaAlpha = 0;
@@ -307,7 +332,7 @@ boolean doCommand(String commandStr) {
           }
          } else bg = null;
         }
-    }
+    } 
   } else {
     if(message.length()>0) message += "\n";
     message += commandStr;
@@ -646,18 +671,28 @@ void changepictures(){
   // scenario choice
   
    if(isCompletedAnswer && mousePressed){
-    scenarioCur = 1;
-    if(isCorrect){
-      isEvent = false;
-      size(457, 387);
-      textFont(createFont("MS PMincho", 20));
-      scenario = loadStrings("scenario_win.txt");
+      scenarioCur = 1;
+      choose_answer = 0;
+      limitTime = 60;
+      isCompletedAnswer = false;
+    if(questionNum <= 5){ 
+      if(isCorrect){
+        isEvent = false;
+        size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        scenario = loadStrings("scenario_win.txt");
+      }
+      else{
+       isEvent = false;
+       size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+       scenario = loadStrings("scenario_lose.txt");
+      }
     }
     else{
-     isEvent = false;
-     size(457, 387);
+      isEvent = false;
       textFont(createFont("MS PMincho", 20));
-     scenario = loadStrings("scenario_lose.txt");
+      scenario = loadStrings("scenario_last.txt");
     }
     
   }

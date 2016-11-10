@@ -8,7 +8,7 @@ Processingでアドベンチャーゲーム。
 
 マウスをクリックしてみましょう
 
->event washi1.jpg washi2.jpg washi3.jpg
+>event
 
 テキストファイルを読み込み、
 その文字列を解釈して実行しています。
