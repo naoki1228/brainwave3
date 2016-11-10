@@ -19,7 +19,7 @@ int messageCur = 0;
 boolean prevMousePressed = false;
 
 // fade_variables
-PImage imgA, imgB, imgC;
+PImage imgA, imgB, imgC, skyimg, parkimg;
 float transparency;
 float targetTransparency;
 boolean isFadeAtoB;
@@ -87,6 +87,7 @@ String Alternative_q5_1;
 String Alternative_q5_2;
 String Alternative_q5_3;
 String Alternative_q5_4;
+int sky;
 
 
 // setup
@@ -184,6 +185,11 @@ void setup() {
   Alternative_q5_4 = "ろくぶんぎ座";
   CorrectAnswer_q5 = 3;
   
+  //背景画像
+  skyimg = loadImage("sky.jpg");
+  parkimg = loadImage("park1.jpg");
+  sky = 0;
+  
 }
 
 
@@ -192,6 +198,12 @@ void draw(){
   
   background(0);
  
+  // background stary sky 
+  if(sky == 0){
+  image(skyimg, 0, 0);
+ }else{
+  image(parkimg, 0, 0);
+  }
  
   if(isEvent == false){
 
@@ -680,12 +692,14 @@ void changepictures(){
         isEvent = false;
         size(457, 387);
         textFont(createFont("MS PMincho", 20));
+        sky++;
         scenario = loadStrings("scenario_win.txt");
       }
       else{
        isEvent = false;
        size(457, 387);
         textFont(createFont("MS PMincho", 20));
+        sky++;
        scenario = loadStrings("scenario_lose.txt");
       }
     }
