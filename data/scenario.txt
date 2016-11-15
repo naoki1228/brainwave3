@@ -27,7 +27,10 @@
 
 マウスをクリックしてみましょう
 
->event washi1.jpg washi2.jpg washi3.jpg
+
+↑画面上部をクリックしてください
+
+>event
 
 その文字列を解釈して実行しています。
 

@@ -19,7 +19,7 @@ int messageCur = 0;
 boolean prevMousePressed = false;
 
 // fade_variables
-PImage imgA, imgB, imgC, skyimg, parkimg;
+PImage imgA, imgB, imgC, skyimg, parkimg,bg_alternative,ryusei;
 float transparency;
 float targetTransparency;
 boolean isFadeAtoB;
@@ -29,7 +29,9 @@ boolean  isFadeCompletedBtoC;
 boolean ischeckerAtoB;
 boolean ischeckerBtoC;
 boolean isEvent = false;
+boolean isNextEvent = false;
 boolean isMuse;
+boolean isRyusei = false;
 int currentTime;
 int fadeCompletedTime;
 float easing;
@@ -89,6 +91,10 @@ String Alternative_q5_3;
 String Alternative_q5_4;
 int sky;
 
+//流星 
+float x  ,vx;
+PImage offscr;
+
 
 // setup
 void setup() {
@@ -120,7 +126,7 @@ void setup() {
   isInAlternative_4 = false;
   isAlphawaveFirstLevel = false;
   isAlphawaveSecondLevel = false;
-  isMuse = true;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
+  isMuse = false;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
   AlphawaveFirstLevel = 0.15;         // α波の基準値
   AlphawaveSecondLevel = 0.25;
   TransparencyError = 4.0;           //  transparencyの値の許容誤差
@@ -190,6 +196,16 @@ void setup() {
   parkimg = loadImage("park1.jpg");
   sky = 0;
   
+  //選択肢背景
+  
+  bg_alternative = loadImage("hosizora.jpg");
+  
+  //流星画面
+  
+  ryusei = loadImage("hosizora.jpg");
+  x = 100;
+  vx = 50;
+  
 }
 
 
@@ -252,30 +268,43 @@ void draw(){
   if(isEvent){
     changepictures();
   }
+  if(isNextEvent){
+  //  nextevent();
+  }
+  if(isRyusei){
+    ryusei();
+  }
 }
 
   //解答の選択
 
 void mouseClicked(){
-
-  if(!isCompletedAnswer){
-    if(isInAlternative_1){
-      choose_answer = 1;
-      isCompletedAnswer = true;
-    }
-    if(isInAlternative_2){
-      choose_answer = 2;
-      isCompletedAnswer = true;
-    }
-    if(isInAlternative_3){
-      choose_answer = 3;
-      isCompletedAnswer = true;
-    }
-    if(isInAlternative_4){
-      choose_answer = 4;
-      isCompletedAnswer = true;
+  if(isEvent){
+    if(!isCompletedAnswer){
+      if(isInAlternative_1){
+        choose_answer = 1;
+        isCompletedAnswer = true;
+      }
+      if(isInAlternative_2){
+        choose_answer = 2;
+        isCompletedAnswer = true;
+      }
+      if(isInAlternative_3){
+        choose_answer = 3;
+        isCompletedAnswer = true;
+      }
+      if(isInAlternative_4){
+        choose_answer = 4;
+        isCompletedAnswer = true;
+      }
     }
   }
+  if(isNextEvent){
+    //scenarioCur++;
+    isNextEvent = false;
+  }
+  
+  
 }
 
 
@@ -285,6 +314,12 @@ boolean doCommand(String commandStr) {
   } else if(commandStr.charAt(0)=='>') {
     String[] args = splitTokens(commandStr);
     if(args.length>0) {
+      if(">nextevent".equals(args[0])) {
+        isNextEvent =true;
+      }
+      if(">ryusei".equals(args[0])){
+        isRyusei = true;
+      }
       if(">event".equals(args[0])) {
       //  if(args.length>1) {
           isEvent = true;
@@ -610,12 +645,14 @@ void changepictures(){
   // 選択ボックスの表示
 
   stroke(0);
-  fill(255);
-  rect(0,imgA.height,imgA.width/2.0,RectSize);
+ // fill(255);
+  tint(200);
+  image(bg_alternative, 0, imgA.height);
+  /*rect(0,imgA.height,imgA.width/2.0,RectSize);
   rect(imgA.width/2.0,imgA.height,imgA.width/2.0,RectSize);
   rect(0,imgA.height+RectSize,imgA.width/2.0,RectSize);
   rect(imgA.width/2.0,imgA.height+RectSize,imgA.width/2.0,RectSize);
-
+*/
 
   // 日本語フォントを選択し指定する呪文
 
@@ -625,7 +662,7 @@ void changepictures(){
   // 選択肢の表示
 
   textAlign(CENTER);
-  fill(0);
+  fill(200);
 
   if(isInAlternative_1){
     textSize(30);
@@ -686,6 +723,12 @@ void changepictures(){
       scenarioCur = 1;
       choose_answer = 0;
       limitTime = 60;
+      transparencyAtoB = 0;
+      transparencyBtoC = 0;
+      isFadeAtoB = true;
+      isFadeBtoC = false;
+      isFadeCompletedAtoB = false;
+      isFadeCompletedBtoC = false;
       isCompletedAnswer = false;
     if(questionNum <= 5){ 
       if(isCorrect){
@@ -710,5 +753,46 @@ void changepictures(){
     }
     
   }
+
+}
+
+/*void nextevent(){
+  fill(255,0,0);
+  stroke(10);
+  line(0,pic_q1_1.height,pic_q1_1.width,pic_q1_1.height);
+  textAlign(CENTER);
+  textSize(40);
+  //text("↑画面上部をクリックしてください",pic_q1_1.width*0.5,pic_q1_1.height+RectSize);
+  println(mouseX);
+  println(mouseY);
+  println(isNextEvent);
+    if(mouseX > 0 && mouseX < pic_q1_1.width && mouseY > 0 && mouseY < pic_q1_1.height){
+      mouseClicked();
+    }
+    println(isNextEvent);
+}
+*/
+
+void ryusei(){
+  tint(255);
+  image(ryusei,0,0);
+  
+  //offscr = createImage(width, height, RGB);
+
+  x += vx;
+ // if (x < 50 || x > width - 50) { vx = -vx; }
+
+  loadPixels();
+  //offscr.pixels = pixels;
+  //offscr.updatePixels();
+
+  noStroke();
+  fill(255,255,0);
+  rotate(-PI/12);
+  ellipse(400-x, 150, 100, 1);
+  rotate(PI/12);
+
+  tint(255, 240);
+  //image(offscr, -3, -3, width + 6, height + 6);
 
 }
