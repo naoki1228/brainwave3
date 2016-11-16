@@ -197,7 +197,7 @@ void setup() {
   
   //背景画像
   skyimg = loadImage("sky.jpg");
-  parkimg = loadImage("park2.jpg");
+  parkimg = loadImage("park1.jpg");
   nightimg = loadImage("nightwalk.jpg");
   sky = 0;
   
@@ -209,7 +209,7 @@ void setup() {
   
   ryusei = loadImage("hosizora.jpg");
   x = 100;
-  vx = 50;
+  vx = 10;
   
 }
 
@@ -352,10 +352,10 @@ boolean doCommand(String commandStr) {
       //  if(args.length>1) {
           isEvent = true;
           bgAlpha = 0;
-          println(isEvent); // for debug
+          println(isEvent);
       
           
-          System.out.println(questionNum);
+          System.out.println("questionNum = " + questionNum);
           
           if(questionNum == 1){
             Question question1 = new Question(pic_q1_1,pic_q1_2,pic_q1_3,Alternative_q1_1,Alternative_q1_2,Alternative_q1_3,Alternative_q1_4,CorrectAnswer_q1);
@@ -627,13 +627,13 @@ void changepictures(){
   }
 
   if(!isCompletedAnswer){
-    fill(255,0,0);     //#030303
+    fill(200);     //#030303
     textSize(50);
     text(nf(limitTime, 2), 100, 50);
   }
 
   if(limitTime < 0){
-    fill(255,0,0);
+    fill(200);
     text("不正解",100,100);
     isCompletedAnswer = true;
   }
@@ -728,22 +728,22 @@ void changepictures(){
 
 
   // 解答の正誤判定
-
+  
+  
   if(choose_answer != 0){
     if(choose_answer == CorrectAnswer){
-      fill(255,0,0);
+      fill(200);
       textSize(30);
       text("正解",100,100);
       isCorrect = true;
       isCompletedAnswer = true;
-      Correct++;
     }
     else{
-      fill(255,0,0);
+      fill(200);
       textSize(30);
       text("不正解",100,100);
       isCorrect = false;
-       isCompletedAnswer = true;
+      isCompletedAnswer = true;
     }
   }
   
@@ -760,93 +760,102 @@ void changepictures(){
       isFadeCompletedAtoB = false;
       isFadeCompletedBtoC = false;
       isCompletedAnswer = false;
-    if(questionNum <= 5){ 
+      if(isCorrect == true){
+        Correct++;
+      }
+    if(questionNum <= 6){ 
       if(isCorrect){
-        if(Correct == 0){
-        isEvent = false;
-        size(457, 387);
-        textFont(createFont("MS PMincho", 20));
-        sky++;
-        scenario = loadStrings("scenario_win_0.txt");
-      }
-         if(Correct == 1){
-        isEvent = false;
-        size(457, 387);
-        textFont(createFont("MS PMincho", 20));
-        sky++;
-        scenario = loadStrings("scenario_win_1.txt");
-      }
-       if(Correct == 2){
-        isEvent = false;
-        size(457, 387);
-        textFont(createFont("MS PMincho", 20));
-        sky++;
-        scenario = loadStrings("scenario_win_2.txt");
-      }
-       if(Correct == 3){
-        isEvent = false;
-        size(457, 387);
-        textFont(createFont("MS PMincho", 20));
-        sky++;
-        scenario = loadStrings("scenario_win_3.txt");
-      }
-       if(Correct == 4){
-        isEvent = false;
-        size(457, 387);
-        textFont(createFont("MS PMincho", 20));
-        sky++;
-        scenario = loadStrings("scenario_win_4.txt");
-      }
-      
-      
+        if(questionNum == 2){
+          isEvent = false;
+          size(457, 387);
+          textFont(createFont("MS PMincho", 20));
+          sky++;
+          scenario = loadStrings("scenario_win_1.txt");
+         }
+         if(questionNum == 3){
+          isEvent = false;
+          size(457, 387);
+          textFont(createFont("MS PMincho", 20));
+          sky++;
+          scenario = loadStrings("scenario_win_2.txt");
+         }
+         if(questionNum == 4){
+          isEvent = false;
+          size(457, 387);
+          textFont(createFont("MS PMincho", 20));
+          sky++;
+          scenario = loadStrings("scenario_win_3.txt");
+         }
+         if(questionNum == 5){
+          isEvent = false;
+          size(457, 387);
+          textFont(createFont("MS PMincho", 20));
+          sky++;
+          scenario = loadStrings("scenario_win_4.txt");
+        }
+         if(questionNum == 6){
+          isEvent = false;
+          size(457, 387);
+          textFont(createFont("MS PMincho", 20));
+          sky++;
+          if(Correct<4){
+            scenario = loadStrings("scenario_win_5_bad.txt");
+          } else{
+            scenario = loadStrings("scenario_win_5_happy.txt");
+          }
+        }
       }
       
       else{
-        if(Correct == 0){
-       isEvent = false;
-       size(457, 387);
-        textFont(createFont("MS PMincho", 20));
-        sky++;
-       scenario = loadStrings("scenario_lose_0.txt");
-      }
-      if(Correct == 1){
+        if(questionNum == 2){
        isEvent = false;
        size(457, 387);
         textFont(createFont("MS PMincho", 20));
         sky++;
        scenario = loadStrings("scenario_lose_1.txt");
-      }if(Correct == 2){
+      }
+      if(questionNum == 3){
        isEvent = false;
        size(457, 387);
         textFont(createFont("MS PMincho", 20));
         sky++;
        scenario = loadStrings("scenario_lose_2.txt");
-      }if(Correct == 3){
+      }if(questionNum == 4){
        isEvent = false;
        size(457, 387);
         textFont(createFont("MS PMincho", 20));
         sky++;
        scenario = loadStrings("scenario_lose_3.txt");
-      }if(Correct == 4){
+      }if(questionNum == 5){
        isEvent = false;
        size(457, 387);
         textFont(createFont("MS PMincho", 20));
         sky++;
        scenario = loadStrings("scenario_lose_4.txt");
+      }if(questionNum == 6){
+       isEvent = false;
+       size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+        if(Correct<4){
+         scenario = loadStrings("scenario_lose_5_bad.txt");
+        } else{
+          scenario = loadStrings("scenario_lose_5_happy.txt");
+        }
       }
       }
       
     }
-    else{
-      isEvent = false;
-      textFont(createFont("MS PMincho", 20));
-      if(Correct < 4){
-      scenario = loadStrings("scenario_last_lose.txt");
-      }
-      else{
-      scenario = loadStrings("scenario_last_win.txt");
-      }
-    }
+    //else{
+    //  isEvent = false;
+    //  textFont(createFont("MS PMincho", 20));
+    //  if(Correct < 4){
+    //  scenario = loadStrings("scenario_last_lose.txt");
+    //  }
+    //  else{
+    //  scenario = loadStrings("scenario_last_win.txt");
+    //  }
+    //}
     
   }
 
