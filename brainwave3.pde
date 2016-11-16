@@ -39,6 +39,10 @@ import ddf.minim.*;
 Minim minim;
 AudioPlayer player;
 
+boolean isPark = false;
+boolean isSky = false;
+
+
 // ren_variables
 float transparencyAtoB;
 float transparencyBtoC;
@@ -193,7 +197,7 @@ void setup() {
   
   //背景画像
   skyimg = loadImage("sky.jpg");
-  parkimg = loadImage("park1.jpg");
+  parkimg = loadImage("park2.jpg");
   nightimg = loadImage("nightwalk.jpg");
   sky = 0;
   
@@ -214,13 +218,26 @@ void setup() {
 void draw(){
   
   background(0);
+  
+  image(nightimg, 0, 0 ,457, 387);
  
+ /*
   // background stary sky 
   if(sky == 0){
-  image(skyimg, 0, 0);
+  image(nightimg, 0, 0);
  }else{
   image(parkimg, 0, 0);
   }
+  */
+  
+  if(isPark == true){
+    image(parkimg, 0, 0 ,457, 387);
+  }
+  if(isSky == true){
+    image(skyimg, 0, 0 ,457, 387);
+  }
+  
+  
  
   if(isEvent == false){
 
@@ -321,11 +338,18 @@ boolean doCommand(String commandStr) {
       if(">ryusei".equals(args[0])){
         isRyusei = true;
       }
+       if(">park".equals(args[0])) { 
+          isPark = true;
+        }
+        if(">sky".equals(args[0])) { 
+          isSky = true;
+        }
       if(">event".equals(args[0])) {
       //  if(args.length>1) {
           isEvent = true;
           bgAlpha = 0;
           println(isEvent); // for debug
+      
           
           System.out.println(questionNum);
           
