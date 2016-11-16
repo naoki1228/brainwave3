@@ -227,7 +227,7 @@ void draw(){
     if(chara!=null) {
       if(charaAlpha<255) charaAlpha += 20;
       tint(255, charaAlpha);
-      image(chara, 0, 0);
+      image(chara, width - chara.width - 40, height - chara.height - 80);
     }
 
     int boardH = 80;
