@@ -762,19 +762,80 @@ void changepictures(){
       isCompletedAnswer = false;
     if(questionNum <= 5){ 
       if(isCorrect){
+        if(Correct == 0){
         isEvent = false;
         size(457, 387);
         textFont(createFont("MS PMincho", 20));
         sky++;
-        scenario = loadStrings("scenario_win.txt");
+        scenario = loadStrings("scenario_win_0.txt");
       }
+         if(Correct == 1){
+        isEvent = false;
+        size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+        scenario = loadStrings("scenario_win_1.txt");
+      }
+       if(Correct == 2){
+        isEvent = false;
+        size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+        scenario = loadStrings("scenario_win_2.txt");
+      }
+       if(Correct == 3){
+        isEvent = false;
+        size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+        scenario = loadStrings("scenario_win_3.txt");
+      }
+       if(Correct == 4){
+        isEvent = false;
+        size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+        scenario = loadStrings("scenario_win_4.txt");
+      }
+      
+      
+      }
+      
       else{
+        if(Correct == 0){
        isEvent = false;
        size(457, 387);
         textFont(createFont("MS PMincho", 20));
         sky++;
-       scenario = loadStrings("scenario_lose.txt");
+       scenario = loadStrings("scenario_lose_0.txt");
       }
+      if(Correct == 1){
+       isEvent = false;
+       size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+       scenario = loadStrings("scenario_lose_1.txt");
+      }if(Correct == 2){
+       isEvent = false;
+       size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+       scenario = loadStrings("scenario_lose_2.txt");
+      }if(Correct == 3){
+       isEvent = false;
+       size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+       scenario = loadStrings("scenario_lose_3.txt");
+      }if(Correct == 4){
+       isEvent = false;
+       size(457, 387);
+        textFont(createFont("MS PMincho", 20));
+        sky++;
+       scenario = loadStrings("scenario_lose_4.txt");
+      }
+      }
+      
     }
     else{
       isEvent = false;
