@@ -41,7 +41,7 @@ AudioPlayer player;
 
 boolean isPark = false;
 boolean isSky = false;
-
+int Correct = 0;
 
 // ren_variables
 float transparencyAtoB;
@@ -241,10 +241,12 @@ void draw(){
  
   if(isEvent == false){
 
+    if(isSky == false){
     if(chara!=null) {
       if(charaAlpha<255) charaAlpha += 20;
       tint(255, charaAlpha);
       image(chara, width - chara.width - 40, height - chara.height - 80);
+    }
     }
 
     int boardH = 80;
@@ -338,6 +340,8 @@ boolean doCommand(String commandStr) {
       if(">ryusei".equals(args[0])){
         isRyusei = true;
       }
+      
+      //画像推移
        if(">park".equals(args[0])) { 
           isPark = true;
         }
@@ -732,6 +736,7 @@ void changepictures(){
       text("正解",100,100);
       isCorrect = true;
       isCompletedAnswer = true;
+      Correct++;
     }
     else{
       fill(255,0,0);
@@ -774,7 +779,12 @@ void changepictures(){
     else{
       isEvent = false;
       textFont(createFont("MS PMincho", 20));
-      scenario = loadStrings("scenario_last.txt");
+      if(Correct < 4){
+      scenario = loadStrings("scenario_last_lose.txt");
+      }
+      else{
+      scenario = loadStrings("scenario_last_win.txt");
+      }
     }
     
   }
