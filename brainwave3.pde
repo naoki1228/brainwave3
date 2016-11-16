@@ -32,6 +32,7 @@ boolean isEvent = false;
 boolean isNextEvent = false;
 boolean isMuse;
 boolean isRyusei = false;
+boolean musicChange = false;
 int currentTime;
 int fadeCompletedTime;
 float easing;
@@ -108,7 +109,7 @@ void setup() {
 
   // setup_fade
   minim = new Minim(this);
-  player = minim.loadFile("healing.mp3");
+  player = minim.loadFile("healing1.mp3");
   player.play();
   isFadeAtoB = true;
   isFadeBtoC = false;
@@ -237,8 +238,12 @@ void draw(){
     image(skyimg, 0, 0 ,457, 387);
   }
   
-  
- 
+  if(isEvent == true && musicChange == false){
+    musicChange = true;
+    player = minim.loadFile("healing2.mp3");
+    player.play();
+  }
+   
   if(isEvent == false){
 
     if(isSky == false){
