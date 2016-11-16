@@ -19,7 +19,7 @@ int messageCur = 0;
 boolean prevMousePressed = false;
 
 // fade_variables
-PImage imgA, imgB, imgC, skyimg, parkimg,bg_alternative,ryusei;
+PImage imgA, imgB, imgC,nightimg, skyimg, parkimg,bg_alternative,ryusei;
 float transparency;
 float targetTransparency;
 boolean isFadeAtoB;
@@ -194,6 +194,7 @@ void setup() {
   //背景画像
   skyimg = loadImage("sky.jpg");
   parkimg = loadImage("park1.jpg");
+  nightimg = loadImage("nightwalk.jpg");
   sky = 0;
   
   //選択肢背景
