@@ -104,9 +104,27 @@ int sky;
 float x  ,vx;
 PImage offscr;
 
+int bgtransparency;
+boolean bgisFadeAtoB;
+boolean bgisFadeCompleted;
+
+int bbgtransparency;
+boolean bbgisFadeAtoB;
+boolean bbgisFadeCompleted;
+
 
 // setup
 void setup() {
+  
+  bgtransparency = 0;
+  bgisFadeAtoB = true;
+  bgisFadeCompleted = false;
+  
+  bbgtransparency = 0;
+  bbgisFadeAtoB = true;
+  bbgisFadeCompleted = false;
+        
+  
   size(457, 387);
   textFont(createFont("MS PMincho", 20)); //String[] fontList = PFont.list(); println(fontList);
   scenario = loadStrings("scenario.txt");
@@ -237,12 +255,14 @@ void draw(){
   }
   */
   
-  if(isPark == true){
-    image(parkimg, 0, 0 ,457, 387);
-  }
-  if(isSky == true){
-    image(skyimg, 0, 0 ,457, 387);
-  }
+  if(isPark){
+    //image(parkimg, 0, 0 ,457, 387);
+   park();
+}
+  if(isSky){
+    //image(skyimg, 0, 0 ,457, 387);
+   sky();  
+}
   
   if(isStartEvent){
     music1.close();
@@ -930,4 +950,62 @@ void ryusei(){
   tint(255, 240);
   //image(offscr, -3, -3, width + 6, height + 6);
 
+}
+
+void park(){
+  background(255);
+  if(255 - bgtransparency <= 1.0) {
+    currentTime = millis();
+    if(bgisFadeCompleted) {     
+        bgtransparency = 0;
+        bgisFadeAtoB = false;
+        bgisFadeCompleted = false;
+      
+    } else {
+      bgisFadeCompleted = true;
+    }
+    
+  }
+
+  if(bgisFadeAtoB) {
+    noTint();
+    image(nightimg, 0, 0);
+    tint(255, bgtransparency);
+    image(parkimg, 0, 0);
+  }
+  else{
+  image(parkimg, 0, 0);
+  }
+
+  bgtransparency += (255 - bgtransparency) * 0.05;
+}
+
+void sky(){
+  background(255);
+  if(255 - bbgtransparency <= 1.0) {
+    currentTime = millis();
+    if(bbgisFadeCompleted) {     
+        bbgtransparency = 0;
+        bbgisFadeAtoB = false;
+        bbgisFadeCompleted = false;
+      
+    } else {
+      bbgisFadeCompleted = true;
+    }
+    
+  }
+
+  if(bbgisFadeAtoB) {
+    noTint();
+    image(parkimg, 0, 0);
+    tint(255, bbgtransparency);
+    image(skyimg, 0, 0);
+  }
+  else{
+     tint(255, 0);
+    image(parkimg, 0, 0);
+  image(skyimg, 0, 0);
+  }
+
+  bbgtransparency += (255 - bbgtransparency) * 0.1;
 }
