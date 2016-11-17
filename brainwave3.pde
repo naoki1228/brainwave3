@@ -32,13 +32,14 @@ boolean isEvent = false;
 boolean isNextEvent = false;
 boolean isMuse;
 boolean isRyusei = false;
-boolean musicChange = false;
+boolean isStartEvent = false;
 int currentTime;
 int fadeCompletedTime;
 float easing;
 import ddf.minim.*;
 Minim minim;
-AudioPlayer player;
+AudioPlayer music1;
+AudioPlayer music2;
 
 boolean isPark = false;
 boolean isSky = false;
@@ -109,8 +110,8 @@ void setup() {
 
   // setup_fade
   minim = new Minim(this);
-  player = minim.loadFile("healing1.mp3");
-  player.play();
+  music1 = minim.loadFile("healing1.mp3");
+  music2 = minim.loadFile("healing2.mp3");
   isFadeAtoB = true;
   isFadeBtoC = false;
   transparency = 0;
@@ -238,10 +239,12 @@ void draw(){
     image(skyimg, 0, 0 ,457, 387);
   }
   
-  if(isEvent == true && musicChange == false){
-    musicChange = true;
-    player = minim.loadFile("healing2.mp3");
-    player.play();
+  if(isStartEvent){
+    music1.close();
+    music2.play();
+  }
+  else{
+    music1.play();
   }
    
   if(isEvent == false){
@@ -356,6 +359,7 @@ boolean doCommand(String commandStr) {
       if(">event".equals(args[0])) {
       //  if(args.length>1) {
           isEvent = true;
+          isStartEvent =true;
           bgAlpha = 0;
           println(isEvent);
       
@@ -904,5 +908,6 @@ void ryusei(){
 
   tint(255, 240);
   //image(offscr, -3, -3, width + 6, height + 6);
+  
 
 }
