@@ -155,9 +155,9 @@ void setup() {
   isInAlternative_4 = false;
   isAlphawaveFirstLevel = false;
   isAlphawaveSecondLevel = false;
-  isMuse = false;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
-  AlphawaveFirstLevel = 0.15;         // α波の基準値
-  AlphawaveSecondLevel = 0.25;
+  isMuse = true;                    //Museがあれば脳波を取る、なければ時間で動く仮のα波の値
+  AlphawaveFirstLevel = 0.10;         // α波の基準値
+  AlphawaveSecondLevel = 0.16;
   TransparencyError = 4.0;           //  transparencyの値の許容誤差
   timeCounter = 0;
   limitTime = 60;                    //  制限時間
