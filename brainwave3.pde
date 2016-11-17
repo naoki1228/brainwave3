@@ -33,14 +33,17 @@ boolean isNextEvent = false;
 boolean isMuse;
 boolean isRyusei = false;
 boolean isStartEvent = false;
+boolean isFinal = false;
+boolean isMusic = false;
 int currentTime;
 int fadeCompletedTime;
 float easing;
+float gain;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer music1;
 AudioPlayer music2;
-
+AudioPlayer music3;
 boolean isPark = false;
 boolean isSky = false;
 int Correct = 0;
@@ -112,6 +115,7 @@ void setup() {
   minim = new Minim(this);
   music1 = minim.loadFile("healing1.mp3");
   music2 = minim.loadFile("healing2.mp3");
+  music3 = minim.loadFile("healing3.mp3");
   isFadeAtoB = true;
   isFadeBtoC = false;
   transparency = 0;
@@ -121,6 +125,7 @@ void setup() {
   ischeckerAtoB = false;
   ischeckerBtoC = false;
   easing = 0.005;
+  gain = 6;
 
   //setup_ren
   transparencyAtoB = 0;
@@ -246,6 +251,16 @@ void draw(){
   else{
     music1.play();
   }
+  if(isFinal){
+    gain = gain - 0.15;
+    music2.setGain(gain);
+  }
+  if(isMusic){
+    music2.close();
+    music3.play();
+  }
+  
+ 
    
   if(isEvent == false){
 
@@ -347,6 +362,12 @@ boolean doCommand(String commandStr) {
       }
       if(">ryusei".equals(args[0])){
         isRyusei = true;
+      }
+      if(">final".equals(args[0])){
+        isFinal = true;
+      }
+      if(">music".equals(args[0])){
+        isMusic = true;
       }
       
       //画像推移
@@ -908,6 +929,5 @@ void ryusei(){
 
   tint(255, 240);
   //image(offscr, -3, -3, width + 6, height + 6);
-  
 
 }
